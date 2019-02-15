@@ -254,3 +254,41 @@ Proof.
     reflexivity.
 Qed.
 
+(* Grammer
+     V : variables
+     T : termianl symbols
+     S : start variable
+     P : production rules
+
+   variables ans terminal symbols should be able to treated together.
+   start variable is always 0.
+   production rule replaces symbol with symbols.
+*)
+
+Inductive symbol : Type :=
+  | terminal : nat -> symbol
+  | variable : nat -> symbol.
+
+(* SententialForm *)
+Definition sform : Type := list symbol.
+
+(* returns list of possible substitutions of given symbol *)
+Definition production := nat -> list sform.
+
+Definition derive (p : production) (sf : sform) : list sform. Admitted.
+
+Definition grammar2lang (p : production) : lang. Admitted.
+(*  fun (w : Str) => derive?? p [variable 0)] ??? *)
+
+Definition grammar_sample : production :=
+  fun (v : nat) =>
+    match v with
+    | 0 => [[terminal 0; variable 0; terminal 1]; nil]
+    | _ => [[variable v]]
+    end.
+
+Example grammar_sample_anbn : eq_lang (grammar2lang grammar_sample) (lang_anbn 0 1).
+Admitted.
+
+anbnb (c1 c2 : nat) (n : nat) :=
+  fun (w : Str) := (times n [c1]) (time (S n) [c2]).
